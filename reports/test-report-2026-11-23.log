@@ -1,0 +1,68 @@
+# LoopForge demo frontend — test report
+# Date: 2026-11-23T08:58:42Z
+# Node: v22.23.5  npm: 10.9.9
+# Command: npm test (package.json: node --test tests/*.test.js)
+# Branch: fix/filter-status-inversion @ 7d45489
+
+
+> loopforge-demo-frontend@0.1.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: addTask appends a trimmed task and ignores blank titles
+ok 1 - addTask appends a trimmed task and ignores blank titles
+  ---
+  duration_ms: 0.512
+  type: 'test'
+  ...
+# Subtest: toggleTask flips only the matching task
+ok 2 - toggleTask flips only the matching task
+  ---
+  duration_ms: 0.096958
+  type: 'test'
+  ...
+# Subtest: removeTask drops only the matching task
+ok 3 - removeTask drops only the matching task
+  ---
+  duration_ms: 0.327042
+  type: 'test'
+  ...
+# Subtest: filterTasks: status=done returns only completed tasks
+ok 4 - filterTasks: status=done returns only completed tasks
+  ---
+  duration_ms: 0.557375
+  type: 'test'
+  ...
+# Subtest: filterTasks: status=todo returns only pending tasks
+ok 5 - filterTasks: status=todo returns only pending tasks
+  ---
+  duration_ms: 0.061666
+  type: 'test'
+  ...
+# Subtest: filterTasks: priority and query combine with status
+ok 6 - filterTasks: priority and query combine with status
+  ---
+  duration_ms: 0.061
+  type: 'test'
+  ...
+# Subtest: getStats counts done, todo and high priority
+ok 7 - getStats counts done, todo and high priority
+  ---
+  duration_ms: 0.149834
+  type: 'test'
+  ...
+# Subtest: serialize / deserialize round-trip and tolerate bad input
+ok 8 - serialize / deserialize round-trip and tolerate bad input
+  ---
+  duration_ms: 0.169292
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 37.025417
