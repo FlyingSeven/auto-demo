@@ -6,6 +6,7 @@ import {
   getStats,
   serialize,
   deserialize,
+  isValidTimeRange,
 } from './tasks.js';
 
 const STORAGE_KEY = 'loopforge-demo-tasks';
@@ -24,12 +25,23 @@ if (tasks.length === 0) {
 const listEl = document.querySelector('#task-list');
 const formEl = document.querySelector('#task-form');
 const inputEl = document.querySelector('#task-input');
+const startEl = document.querySelector('#task-start');
+const endEl = document.querySelector('#task-end');
+const errorEl = document.querySelector('#form-error');
 const queryEl = document.querySelector('#query');
 const statusEl = document.querySelector('#status');
 const statsEl = document.querySelector('#stats');
 
 function persist() {
   localStorage.setItem(STORAGE_KEY, serialize(tasks));
+}
+
+function formatTime(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? String(value)
+    : date.toLocaleString();
 }
 
 function render() {
@@ -58,6 +70,14 @@ function render() {
     const badge = document.createElement('small');
     badge.textContent = task.priority;
 
+    // Old stored tasks may have no time fields at all.
+    if (task.startTime || task.endTime) {
+      const timeRange = document.createElement('small');
+      timeRange.className = 'time-range';
+      timeRange.textContent = `${formatTime(task.startTime)} - ${formatTime(task.endTime)}`;
+      li.append(timeRange);
+    }
+
     const del = document.createElement('button');
     del.type = 'button';
     del.textContent = 'x';
@@ -78,8 +98,20 @@ function render() {
 
 formEl.addEventListener('submit', (event) => {
   event.preventDefault();
-  tasks = addTask(tasks, inputEl.value, { priority: 'normal' });
+
+  const startTime = startEl.value || null;
+  const endTime = endEl.value || null;
+  if (!isValidTimeRange(startTime, endTime)) {
+    errorEl.textContent = 'Invalid time range: end time must not be before start time.';
+    errorEl.hidden = false;
+    return;
+  }
+  errorEl.hidden = true;
+
+  tasks = addTask(tasks, inputEl.value, { startTime, endTime });
   inputEl.value = '';
+  startEl.value = '';
+  endEl.value = '';
   persist();
   render();
 });

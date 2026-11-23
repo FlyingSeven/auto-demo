@@ -13,8 +13,11 @@
 
       <form id="task-form">
         <input id="task-input" type="text" placeholder="Add a task..." required />
+        <input id="task-start" type="datetime-local" aria-label="Start time" />
+        <input id="task-end" type="datetime-local" aria-label="End time" />
         <button type="submit">Add</button>
       </form>
+      <p id="form-error" class="form-error" hidden></p>
 
       <div class="toolbar">
         <input id="query" type="search" placeholder="Filter by title or tag..." />
