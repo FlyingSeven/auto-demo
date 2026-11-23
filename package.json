@@ -1,0 +1,15 @@
+{
+  "name": "loopforge-demo-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A tiny vanilla-JS frontend used to validate LoopForge delivery SOPs",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LoopForge demo tasks</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>Tasks</h1>
+      <p class="subtitle">A tiny frontend used to validate LoopForge delivery SOPs.</p>
+
+      <form id="task-form">
+        <input id="task-input" type="text" placeholder="Add a task..." required />
+        <button type="submit">Add</button>
+      </form>
+
+      <div class="toolbar">
+        <input id="query" type="search" placeholder="Filter by title or tag..." />
+        <select id="status">
+          <option value="all">All</option>
+          <option value="todo">To do</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+
+      <ul id="task-list"></ul>
+      <p id="stats" class="stats"></p>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
