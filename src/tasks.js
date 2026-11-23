@@ -40,19 +40,16 @@ export function findTask(tasks, id) {
 /**
  * Filter tasks by status, priority and a free-text query.
  *
- * BUG (intentional, for the LoopForge bug-fix SOP demo):
- * The `status === 'done'` branch currently drops tasks that ARE done,
- * i.e. the exact opposite of what the caller asked for. The
- * `status === 'todo'` branch has the same inversion. Everything else is
- * correct. Fix both branches and the whole suite goes green.
+ * `status: 'done'` keeps only completed tasks, `status: 'todo'` keeps only
+ * pending ones, any other value (including the default `'all'`) keeps all.
  */
 export function filterTasks(tasks, filters = {}) {
   const { status = 'all', priority = 'all', query = '' } = filters;
   const needle = String(query).trim().toLowerCase();
 
   return tasks.filter((task) => {
-    if (status === 'done' && task.done) return false;
-    if (status === 'todo' && !task.done) return false;
+    if (status === 'done' && !task.done) return false;
+    if (status === 'todo' && task.done) return false;
 
     if (priority !== 'all' && task.priority !== priority) return false;
     if (
