@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: addTask appends a trimmed task and ignores blank titles
+ok 1 - addTask appends a trimmed task and ignores blank titles
+  ---
+  duration_ms: 0.697125
+  type: 'test'
+  ...
+# Subtest: toggleTask flips only the matching task
+ok 2 - toggleTask flips only the matching task
+  ---
+  duration_ms: 0.141958
+  type: 'test'
+  ...
+# Subtest: removeTask drops only the matching task
+ok 3 - removeTask drops only the matching task
+  ---
+  duration_ms: 0.686
+  type: 'test'
+  ...
+# Subtest: filterTasks: status=done returns only completed tasks
+not ok 4 - filterTasks: status=done returns only completed tasks
+  ---
+  duration_ms: 1.025667
+  type: 'test'
+  location: '/workspace/auto-demo/tests/tasks.test.js:46:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'b',
+    +   'd'
+    -   'a',
+    -   'c'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'a'
+    1: 'c'
+  actual:
+    0: 'b'
+    1: 'd'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/auto-demo/tests/tasks.test.js:48:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: filterTasks: status=todo returns only pending tasks
+not ok 5 - filterTasks: status=todo returns only pending tasks
+  ---
+  duration_ms: 0.262375
+  type: 'test'
+  location: '/workspace/auto-demo/tests/tasks.test.js:54:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'a',
+    +   'c'
+    -   'b',
+    -   'd'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'b'
+    1: 'd'
+  actual:
+    0: 'a'
+    1: 'c'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/auto-demo/tests/tasks.test.js:56:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: filterTasks: priority and query combine with status
+ok 6 - filterTasks: priority and query combine with status
+  ---
+  duration_ms: 0.085709
+  type: 'test'
+  ...
+# Subtest: getStats counts done, todo and high priority
+ok 7 - getStats counts done, todo and high priority
+  ---
+  duration_ms: 0.104917
+  type: 'test'
+  ...
+# Subtest: serialize / deserialize round-trip and tolerate bad input
+ok 8 - serialize / deserialize round-trip and tolerate bad input
+  ---
+  duration_ms: 0.23825
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 6
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 40.057959

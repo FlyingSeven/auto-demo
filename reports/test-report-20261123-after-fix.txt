@@ -1,0 +1,62 @@
+
+> loopforge-demo-frontend@0.1.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: addTask appends a trimmed task and ignores blank titles
+ok 1 - addTask appends a trimmed task and ignores blank titles
+  ---
+  duration_ms: 0.504167
+  type: 'test'
+  ...
+# Subtest: toggleTask flips only the matching task
+ok 2 - toggleTask flips only the matching task
+  ---
+  duration_ms: 0.105792
+  type: 'test'
+  ...
+# Subtest: removeTask drops only the matching task
+ok 3 - removeTask drops only the matching task
+  ---
+  duration_ms: 0.355833
+  type: 'test'
+  ...
+# Subtest: filterTasks: status=done returns only completed tasks
+ok 4 - filterTasks: status=done returns only completed tasks
+  ---
+  duration_ms: 0.608542
+  type: 'test'
+  ...
+# Subtest: filterTasks: status=todo returns only pending tasks
+ok 5 - filterTasks: status=todo returns only pending tasks
+  ---
+  duration_ms: 0.078208
+  type: 'test'
+  ...
+# Subtest: filterTasks: priority and query combine with status
+ok 6 - filterTasks: priority and query combine with status
+  ---
+  duration_ms: 0.092792
+  type: 'test'
+  ...
+# Subtest: getStats counts done, todo and high priority
+ok 7 - getStats counts done, todo and high priority
+  ---
+  duration_ms: 0.241583
+  type: 'test'
+  ...
+# Subtest: serialize / deserialize round-trip and tolerate bad input
+ok 8 - serialize / deserialize round-trip and tolerate bad input
+  ---
+  duration_ms: 0.250334
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 37.771958
