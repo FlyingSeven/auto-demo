@@ -9,6 +9,8 @@ import {
   getStats,
   serialize,
   deserialize,
+  isValidTimeRange,
+  updateTaskTime,
 } from '../src/tasks.js';
 
 function fixture() {
@@ -84,4 +86,81 @@ test('serialize / deserialize round-trip and tolerate bad input', () => {
   const tasks = fixture();
   assert.deepEqual(deserialize(serialize(tasks)), tasks);
   assert.deepEqual(deserialize('not json'), []);
+});
+
+test('createTask stores optional start/end time and defaults to null', () => {
+  const withTime = addTask([], 'Write report', {
+    startTime: '2026-11-23T09:00',
+    endTime: '2026-11-23T11:00',
+  });
+  assert.equal(withTime[0].startTime, '2026-11-23T09:00');
+  assert.equal(withTime[0].endTime, '2026-11-23T11:00');
+
+  const withoutTime = addTask([], 'No schedule');
+  assert.equal(withoutTime[0].startTime, null);
+  assert.equal(withoutTime[0].endTime, null);
+});
+
+test('updateTaskTime sets start/end time on the matching task only', () => {
+  const result = updateTaskTime(fixture(), 'b', {
+    startTime: '2026-11-23T09:00',
+    endTime: '2026-11-23T10:00',
+  });
+
+  const updated = result.find((task) => task.id === 'b');
+  assert.equal(updated.startTime, '2026-11-23T09:00');
+  assert.equal(updated.endTime, '2026-11-23T10:00');
+  assert.equal(result.find((task) => task.id === 'a').startTime, undefined);
+
+  const cleared = updateTaskTime(result, 'b', { startTime: '', endTime: null });
+  assert.equal(cleared.find((task) => task.id === 'b').startTime, null);
+  assert.equal(cleared.find((task) => task.id === 'b').endTime, null);
+});
+
+test('updateTaskTime rejects an inverted range and keeps tasks untouched', () => {
+  const tasks = fixture();
+  assert.throws(
+    () =>
+      updateTaskTime(tasks, 'b', {
+        startTime: '2026-11-23T10:00',
+        endTime: '2026-11-23T09:00',
+      }),
+    /Invalid time range/
+  );
+  // The original list must not have been mutated by the failed update.
+  assert.deepEqual(
+    tasks.map((task) => 'startTime' in task),
+    [false, false, false, false]
+  );
+});
+
+test('isValidTimeRange accepts open values and rejects inverted ones', () => {
+  assert.equal(isValidTimeRange('2026-11-23T09:00', '2026-11-23T10:00'), true);
+  assert.equal(isValidTimeRange('2026-11-23T10:00', '2026-11-23T10:00'), true);
+  assert.equal(isValidTimeRange('2026-11-23T09:00', '2026-11-23T09:00'), true);
+  assert.equal(isValidTimeRange(null, '2026-11-23T10:00'), true);
+  assert.equal(isValidTimeRange('2026-11-23T09:00', null), true);
+  assert.equal(isValidTimeRange(null, null), true);
+  assert.equal(
+    isValidTimeRange('2026-11-23T10:00', '2026-11-23T09:00'),
+    false
+  );
+});
+
+test('tasks without time fields keep working alongside timed ones', () => {
+  // Simulates old localStorage data stored before start/end time existed.
+  const legacy = deserialize(JSON.stringify([
+    { id: 'old-1', title: 'Legacy task', done: false, priority: 'normal', tags: [] },
+  ]));
+  assert.equal(legacy[0].startTime, undefined);
+  assert.equal(legacy[0].endTime, undefined);
+
+  const mixed = updateTaskTime(legacy, 'old-1', {
+    startTime: '2026-11-23T08:00',
+    endTime: '2026-11-23T09:00',
+  });
+  assert.equal(mixed[0].startTime, '2026-11-23T08:00');
+
+  const roundTrip = deserialize(serialize(mixed));
+  assert.equal(roundTrip[0].endTime, '2026-11-23T09:00');
 });

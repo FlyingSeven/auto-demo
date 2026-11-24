@@ -104,3 +104,13 @@ li button {
   color: #57606a;
   font-size: 0.875rem;
 }
+
+.form-error {
+  margin: 0 0 1rem;
+  color: #cf222e;
+  font-size: 0.875rem;
+}
+
+li small.time-range {
+  color: #57606a;
+}

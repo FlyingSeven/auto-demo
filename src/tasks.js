@@ -15,6 +15,8 @@ export function createTask(title, options = {}) {
     done: false,
     priority: options.priority || 'normal',
     tags: Array.isArray(options.tags) ? [...options.tags] : [],
+    startTime: options.startTime || null,
+    endTime: options.endTime || null,
   };
 }
 
@@ -27,6 +29,30 @@ export function toggleTask(tasks, id) {
   return tasks.map((task) =>
     task.id === id ? { ...task, done: !task.done } : task
   );
+}
+
+/**
+ * Check whether an optional start/end pair is a valid (non-inverted) range.
+ * Missing values (`null` / `undefined`) on either side count as valid.
+ */
+export function isValidTimeRange(startTime, endTime) {
+  if (!startTime || !endTime) return true;
+  const start = new Date(startTime).getTime();
+  const end = new Date(endTime).getTime();
+  return end >= start;
+}
+
+/**
+ * Set the optional start/end time of a task by id.
+ * Throws when the new pair forms an inverted range (end before start).
+ */
+export function updateTaskTime(tasks, id, { startTime, endTime } = {}) {
+  const next = { startTime: startTime || null, endTime: endTime || null };
+  if (!isValidTimeRange(next.startTime, next.endTime)) {
+    throw new Error('Invalid time range: endTime must not be before startTime');
+  }
+
+  return tasks.map((task) => (task.id === id ? { ...task, ...next } : task));
 }
 
 export function removeTask(tasks, id) {
